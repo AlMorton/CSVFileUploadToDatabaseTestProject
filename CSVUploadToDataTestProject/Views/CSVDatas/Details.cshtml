@@ -1,0 +1,42 @@
+﻿@model CSVUploadToDataTestProject.EntityFramework.DomainModel.CSVData
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>CSVData</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.FooData)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FooData)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Client)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Client.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Site)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Site.Id)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
