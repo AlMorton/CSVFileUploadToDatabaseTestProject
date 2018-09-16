@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CSVUploadToDataProject.Services;
 using CSVUploadToDataTestProject.EntityFramework;
 using CSVUploadToDataTestProject.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -36,6 +37,7 @@ namespace CSVUploadToDataTestProject
             );
 
             services.AddScoped<IFileUploadFacade, FileUploadFacade>();
+            services.AddSingleton<ICSVDataDTOStore, CSVDataDTOStore>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {

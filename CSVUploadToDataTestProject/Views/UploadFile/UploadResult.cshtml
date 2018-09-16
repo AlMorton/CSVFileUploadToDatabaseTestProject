@@ -1,7 +1,16 @@
 ﻿
+@model CSVUploadToDataProject.Models.UploadFile.UploadResultModel
+
 @{
     ViewData["Title"] = "UploadResult";
 }
 
 <h2>UploadResult</h2>
+
+@foreach (var item in Model.CSVDataDTOs)
+{
+    
+    <p>@item.FooData</p>
+}
+
 
