@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2003
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSVUploadToDataTestProject", "CSVUploadToDataTestProject\CSVUploadToDataTestProject.csproj", "{F7C55949-83AF-41CE-8507-CAA1BC27C271}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSVUploadToDataProject", "CSVUploadToDataTestProject\CSVUploadToDataProject.csproj", "{F7C55949-83AF-41CE-8507-CAA1BC27C271}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSVUploadToData.Tests", "CSVUploadToData.Tests\CSVUploadToData.Tests.csproj", "{DCECF4C7-077E-4DCC-BA86-68647CFA34F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{F7C55949-83AF-41CE-8507-CAA1BC27C271}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7C55949-83AF-41CE-8507-CAA1BC27C271}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7C55949-83AF-41CE-8507-CAA1BC27C271}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCECF4C7-077E-4DCC-BA86-68647CFA34F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCECF4C7-077E-4DCC-BA86-68647CFA34F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCECF4C7-077E-4DCC-BA86-68647CFA34F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCECF4C7-077E-4DCC-BA86-68647CFA34F7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

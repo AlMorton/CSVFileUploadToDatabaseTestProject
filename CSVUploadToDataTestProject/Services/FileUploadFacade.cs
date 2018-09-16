@@ -9,14 +9,15 @@ namespace CSVUploadToDataTestProject.Services
 {
     public interface IFileUploadFacade
     {
-        Task<List<string>> ParseFileAsync(IFormFile file);
+        Task<List<CSVDataDTO>> ParseFileAsync(IFormFile file);
     }
 
     public class FileUploadFacade : IFileUploadFacade
     {
-        private List<string> DataInFile { get; set; } = new List<string>();
+        private List<CSVDataDTO> DataInFile { get; set; } = new List<CSVDataDTO>();
 
-        public async Task<List<string>> ParseFileAsync(IFormFile file)
+
+        public async Task<List<CSVDataDTO>> ParseFileAsync(IFormFile file)
         {   
 
             if (file.Length > 0)
@@ -36,26 +37,33 @@ namespace CSVUploadToDataTestProject.Services
 
                     while ((line = await sr.ReadLineAsync()) != null)
                     {
-                        DataInFile.Add(line);
+                        var dto = ConvertToCSVDataDTO(ParseLine(line));
+                        DataInFile.Add(dto);
                     }
                     ms.Flush();
                 }
             }
 
             return DataInFile;
-        }
+        }       
 
-        public void ContructCSVViewModel()
-        {
-            foreach (var line in DataInFile)
-            {
-
-            }
-        } 
-
-        private void ParseLineToModel(string line)
+        public string[] ParseLine(string line)
         {
             var lineContents = line.Split(',');
+
+            return lineContents;
         }
+
+        public CSVDataDTO ConvertToCSVDataDTO(string[] strings)
+        {
+            CSVDataDTO cSVDataDTO = new CSVDataDTO();
+
+            cSVDataDTO.ClientId = int.Parse(strings[0]);
+            cSVDataDTO.Site = strings[1];
+            cSVDataDTO.Date = DateTime.Parse(strings[2]);
+            cSVDataDTO.FooData = int.Parse(strings[3]);
+
+            return cSVDataDTO;
+        }       
     }
 }
