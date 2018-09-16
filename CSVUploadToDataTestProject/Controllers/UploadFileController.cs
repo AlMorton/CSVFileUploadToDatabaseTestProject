@@ -8,6 +8,7 @@ using CSVUploadToDataProject.Services;
 using CSVUploadToDataTestProject.Models.UploadFile;
 using CSVUploadToDataTestProject.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -19,12 +20,15 @@ namespace CSVUploadToDataTestProject.Controllers
     {
         private readonly IFileUploadFacade _fileUploadFacade;
         private readonly ICSVDataDTOStore _iCSVDataDTOStore;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         public UploadFileController(IFileUploadFacade fileUploadFacade,
-            ICSVDataDTOStore iCSVDataDTOStore)
+                                    ICSVDataDTOStore iCSVDataDTOStore,
+                                    IHostingEnvironment hostingEnvironment)
         {
             _fileUploadFacade = fileUploadFacade;
             _iCSVDataDTOStore = iCSVDataDTOStore;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public IActionResult Index()
@@ -53,6 +57,15 @@ namespace CSVUploadToDataTestProject.Controllers
             var model = new UploadResultModel();
             model.CSVDataDTOs = _iCSVDataDTOStore.CSVDataDTOs;
             return View(model);
+        }
+
+        public IActionResult DownloadSampleFile()
+        {
+            string wwwrootpath = _hostingEnvironment.WebRootPath;
+
+            byte[] filebytes = System.IO.File.ReadAllBytes(wwwrootpath + "/SampleFile/CSVFileUploadTestFile.csv");
+
+            return File(filebytes, "application/force-download", "CSVFileUploadTestFile.csv");
         }
     }
 }

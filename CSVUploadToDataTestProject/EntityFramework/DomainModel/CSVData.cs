@@ -1,8 +1,9 @@
-﻿using System;
+﻿using CSVUploadToDataProject.EntityFramework.Repository;
+using System;
 
 namespace CSVUploadToDataTestProject.EntityFramework.DomainModel
 {
-    public class CSVData
+    public class CSVData : IHasId<int>
     {
         public int Id { get; set; }
 

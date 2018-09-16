@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using CSVUploadToDataProject.EntityFramework.Repository;
+using System.Collections.Generic;
 
 namespace CSVUploadToDataTestProject.EntityFramework.DomainModel
 {
-    public class Site
+    public class Site : IHasId<int>
     {
         public int Id { get; set; }
 

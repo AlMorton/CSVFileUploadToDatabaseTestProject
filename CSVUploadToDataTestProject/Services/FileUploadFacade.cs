@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,8 +15,7 @@ namespace CSVUploadToDataTestProject.Services
 
     public class FileUploadFacade : IFileUploadFacade
     {
-        private List<CSVDataDTO> DataInFile { get; set; } = new List<CSVDataDTO>();
-
+        private List<CSVDataDTO> DataInFile { get; set; } = new List<CSVDataDTO>();        
 
         public async Task<List<CSVDataDTO>> ParseFileAsync(IFormFile file)
         {   
@@ -60,10 +60,21 @@ namespace CSVUploadToDataTestProject.Services
 
             cSVDataDTO.ClientId = int.Parse(strings[0]);
             cSVDataDTO.Site = strings[1];
-            cSVDataDTO.Date = DateTime.Parse(strings[2]);
+
+
+            var dateTimeStyle = DateTimeStyles.AssumeUniversal;        
+
+            DateTime date;
+
+            DateTime.TryParse(strings[2], new CultureInfo("en-GB"), dateTimeStyle, out date);
+
+            cSVDataDTO.Date = date;
+
             cSVDataDTO.FooData = int.Parse(strings[3]);
 
             return cSVDataDTO;
         }       
+
+
     }
 }

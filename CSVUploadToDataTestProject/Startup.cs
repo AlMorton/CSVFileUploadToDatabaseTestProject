@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CSVUploadToDataProject.EntityFramework.Repository;
 using CSVUploadToDataProject.Services;
 using CSVUploadToDataTestProject.EntityFramework;
 using CSVUploadToDataTestProject.Services;
@@ -36,6 +37,8 @@ namespace CSVUploadToDataTestProject
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
 
+            services.AddScoped(typeof(IRepostory<,>), typeof(Repository<,>));
+
             services.AddScoped<IFileUploadFacade, FileUploadFacade>();
             services.AddSingleton<ICSVDataDTOStore, CSVDataDTOStore>();
 
@@ -58,19 +61,21 @@ namespace CSVUploadToDataTestProject
 
             var siteWidePolicy = new AuthorizationPolicyBuilder()
                 .RequireAuthenticatedUser()
-                .RequireClaim("Name", "Test")               
+                .RequireClaim("role", "AppAccess")                  
                 .Build();
 
-            services.AddMvc(options => {                               
+            services.AddMvc(options => {
                 
-            
+                //options.Filters.Add(new AuthorizeFilter(siteWidePolicy));
+                //options.Filters.Add(typeof(AllowAnonymousFilter), 2);
+
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("HasSiteAccess", policy => 
-                    policy.RequireClaim("Name", "Test"));
-            });            
+                options.AddPolicy("SiteAccessAllowed", policy =>
+                policy.RequireClaim("role", "AppAccess"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -86,7 +91,7 @@ namespace CSVUploadToDataTestProject
                 app.UseHsts();
             }
 
-            app.UseAuthentication();          
+            app.UseAuthentication();                 
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

@@ -7,10 +7,24 @@
 
 <h2>UploadResult</h2>
 
-@foreach (var item in Model.CSVDataDTOs)
-{
-    
-    <p>@item.FooData</p>
-}
-
-
+<table class="table table-striped" >
+    <thead>
+        <tr>
+            <th>Client Id</th>
+            <th>Date</th>
+            <th>Site</th>
+            <th>Data</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CSVDataDTOs)
+        {
+        <tr>
+            <td>@item.ClientId</td>
+            <td>@item.Date</td>
+            <td>@item.Site</td>
+            <td>@item.FooData</td>
+        </tr>            
+        }
+    </tbody>
+</table>

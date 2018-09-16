@@ -8,29 +8,30 @@ using Microsoft.EntityFrameworkCore;
 using CSVUploadToDataTestProject.EntityFramework;
 using CSVUploadToDataTestProject.EntityFramework.DomainModel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using CSVUploadToDataProject.EntityFramework.Repository;
 
-namespace CSVUploadToDataTestProject.Controllers
+namespace CSVUploadToDataProject.Controllers
 {
     [Authorize]
-    public class CSVDataController : Controller
+    public class SitesController : Controller
     {
-        private readonly IRepostory<CSVData, int> _repostory;
+        private readonly IRepostory<Site, int> _repostory;
 
-        public CSVDataController(IRepostory<CSVData, int> repostory)
+        public SitesController(IRepostory<Site, int> repostory)
         {
             _repostory = repostory;
         }
 
-        // GET: CSVData
+
+
+        // GET: Sites
         public async Task<IActionResult> Index()
         {
-            var myDbContext = _repostory.DbContext().CSVData.Include(c => c.Client).Include(c => c.Site);
+            var myDbContext = _repostory.Query().Include(s => s.Client);
             return View(await myDbContext.ToListAsync());
-        }        
+        }
 
-        // GET: CSVData/Details/5
+        // GET: Sites/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -38,45 +39,46 @@ namespace CSVUploadToDataTestProject.Controllers
                 return NotFound();
             }
 
-            var cSVData = await _repostory.DbContext().CSVData
-                .Include(c => c.Client)
-                .Include(c => c.Site)
+            var site = await _repostory.DbContext().Sites
+                .Include(s => s.Client)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (cSVData == null)
+            if (site == null)
             {
                 return NotFound();
             }
 
-            return View(cSVData);
+            return View(site);
         }
 
-        // GET: CSVData/Create
+        // GET: Sites/Create
         public IActionResult Create()
         {
-            ViewData["ClientId"] = new SelectList(_repostory.DbContext().Clients, "Id", "Id");
-            ViewData["SiteId"] = new SelectList(_repostory.DbContext().Sites, "Id", "Id");
+            ViewData["ClientId"] = new SelectList(_repostory.DbContext().Clients, "Id", "Name");
+
             return View();
         }
 
-        // POST: CSVData/Create
+        // POST: Sites/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Date,FooData,ClientId,SiteId")] CSVData cSVData)
+        public async Task<IActionResult> Create([Bind("Id,Name,ClientId")] Site site)
         {
             if (ModelState.IsValid)
             {
-                _repostory.DbContext().Add(cSVData);
-                await _repostory.DbContext().SaveChangesAsync();
+                //_repostory.DbContext().Add(site);
+                //await _repostory.DbContext().SaveChangesAsync();
+                await _repostory.SaveAsync(site);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_repostory.DbContext().Clients, "Id", "Id", cSVData.ClientId);
-            ViewData["SiteId"] = new SelectList(_repostory.DbContext().Sites, "Id", "Id", cSVData.SiteId);
-            return View(cSVData);
+
+            ViewData["ClientId"] = new SelectList(_repostory.DbContext().Clients, "Id", "Id", site.ClientId);
+
+            return View(site);
         }
 
-        // GET: CSVData/Edit/5
+        // GET: Sites/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -84,24 +86,23 @@ namespace CSVUploadToDataTestProject.Controllers
                 return NotFound();
             }
 
-            var cSVData = await _repostory.DbContext().CSVData.FindAsync(id);
-            if (cSVData == null)
+            var site = await _repostory.DbContext().Sites.FindAsync(id);
+            if (site == null)
             {
                 return NotFound();
             }
-            ViewData["ClientId"] = new SelectList(_repostory.DbContext().Clients, "Id", "Id", cSVData.ClientId);
-            ViewData["SiteId"] = new SelectList(_repostory.DbContext().Sites, "Id", "Id", cSVData.SiteId);
-            return View(cSVData);
+            ViewData["ClientId"] = new SelectList(_repostory.DbContext().Clients, "Id", "Name", site.ClientId);
+            return View(site);
         }
 
-        // POST: CSVData/Edit/5
+        // POST: Sites/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Date,FooData,ClientId,SiteId")] CSVData cSVData)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ClientId")] Site site)
         {
-            if (id != cSVData.Id)
+            if (id != site.Id)
             {
                 return NotFound();
             }
@@ -110,12 +111,13 @@ namespace CSVUploadToDataTestProject.Controllers
             {
                 try
                 {
-                    _repostory.DbContext().Update(cSVData);
-                    await _repostory.DbContext().SaveChangesAsync();
+                    await _repostory.SaveAsync(site);
+                    //_repostory.DbContext().Update(site);
+                    //await _repostory.DbContext().SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CSVDataExists(cSVData.Id))
+                    if (!SiteExists(site.Id))
                     {
                         return NotFound();
                     }
@@ -126,12 +128,11 @@ namespace CSVUploadToDataTestProject.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_repostory.DbContext().Clients, "Id", "Id", cSVData.ClientId);
-            ViewData["SiteId"] = new SelectList(_repostory.DbContext().Sites, "Id", "Id", cSVData.SiteId);
-            return View(cSVData);
+            ViewData["ClientId"] = new SelectList(_repostory.DbContext().Clients, "Id", "Id", site.ClientId);
+            return View(site);
         }
 
-        // GET: CSVData/Delete/5
+        // GET: Sites/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -139,32 +140,31 @@ namespace CSVUploadToDataTestProject.Controllers
                 return NotFound();
             }
 
-            var cSVData = await _repostory.DbContext().CSVData
-                .Include(c => c.Client)
-                .Include(c => c.Site)
+            var site = await _repostory.DbContext().Sites
+                .Include(s => s.Client)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (cSVData == null)
+            if (site == null)
             {
                 return NotFound();
             }
 
-            return View(cSVData);
+            return View(site);
         }
 
-        // POST: CSVData/Delete/5
+        // POST: Sites/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var cSVData = await _repostory.DbContext().CSVData.FindAsync(id);
-            _repostory.DbContext().CSVData.Remove(cSVData);
+            var site = await _repostory.DbContext().Sites.FindAsync(id);
+            _repostory.DbContext().Sites.Remove(site);
             await _repostory.DbContext().SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CSVDataExists(int id)
+        private bool SiteExists(int id)
         {
-            return _repostory.DbContext().CSVData.Any(e => e.Id == id);
+            return _repostory.DbContext().Sites.Any(e => e.Id == id);
         }
     }
 }

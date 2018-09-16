@@ -55,6 +55,7 @@ namespace CSVUploadToDataTestProject.Controllers
                 var claims = new List<Claim> {
 
                     new Claim(ClaimTypes.Name, logIn.Username),
+                    new Claim(ClaimTypes.Role, "AppAccess")
                 };
 
                 var user = new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies"));
