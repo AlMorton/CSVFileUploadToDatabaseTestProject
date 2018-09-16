@@ -33,7 +33,12 @@ namespace CSVUploadToDataTestProject.Controllers
                       
             var result = await _fileUploadFacade.ParseFileAsync(form.File);
 
-            return Json(result);
+            return RedirectToAction("UploadResult", result );
+        }
+
+        public IActionResult UploadResult(List<CSVDataDTO> cSVDataDTOs)
+        {
+            return View(cSVDataDTOs);
         }
     }
 }
