@@ -7,26 +7,29 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CSVUploadToDataTestProject.EntityFramework;
 using CSVUploadToDataTestProject.EntityFramework.DomainModel;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace CSVUploadToDataTestProject.Controllers
 {
-    public class CSVDatasController : Controller
+    [Authorize]
+    public class CSVDataController : Controller
     {
         private readonly MyDbContext _context;
 
-        public CSVDatasController(MyDbContext context)
+        public CSVDataController(MyDbContext context)
         {
             _context = context;
         }
 
-        // GET: CSVDatas
+        // GET: CSVData
         public async Task<IActionResult> Index()
         {
             var myDbContext = _context.CSVData.Include(c => c.Client).Include(c => c.Site);
             return View(await myDbContext.ToListAsync());
-        }
+        }        
 
-        // GET: CSVDatas/Details/5
+        // GET: CSVData/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,7 +49,7 @@ namespace CSVUploadToDataTestProject.Controllers
             return View(cSVData);
         }
 
-        // GET: CSVDatas/Create
+        // GET: CSVData/Create
         public IActionResult Create()
         {
             ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "Id");
@@ -54,7 +57,7 @@ namespace CSVUploadToDataTestProject.Controllers
             return View();
         }
 
-        // POST: CSVDatas/Create
+        // POST: CSVData/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -72,7 +75,7 @@ namespace CSVUploadToDataTestProject.Controllers
             return View(cSVData);
         }
 
-        // GET: CSVDatas/Edit/5
+        // GET: CSVData/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -90,7 +93,7 @@ namespace CSVUploadToDataTestProject.Controllers
             return View(cSVData);
         }
 
-        // POST: CSVDatas/Edit/5
+        // POST: CSVData/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -127,7 +130,7 @@ namespace CSVUploadToDataTestProject.Controllers
             return View(cSVData);
         }
 
-        // GET: CSVDatas/Delete/5
+        // GET: CSVData/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -147,7 +150,7 @@ namespace CSVUploadToDataTestProject.Controllers
             return View(cSVData);
         }
 
-        // POST: CSVDatas/Delete/5
+        // POST: CSVData/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
