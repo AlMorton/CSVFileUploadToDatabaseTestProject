@@ -1,4 +1,5 @@
-﻿using CSVUploadToDataTestProject.EntityFramework;
+﻿using CSVUploadToDataProject.EntityFramework.Repository;
+using CSVUploadToDataTestProject.EntityFramework;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using System;
@@ -8,8 +9,10 @@ using System.Text;
 
 namespace CSVUploadToData.Tests.MockSetUp
 {
-    public class MockDBContext<T> where T : class
+    public class MockDBContext<T> where T : class, IHasId<int>
     {
+        public Repository<T, int> _repository { get; private set; }
+
         public Mock<MyDbContext> _dbContext { get; private set; }
 
         public Mock<DbSet<T>> MockDbSet { get; private set; }        
@@ -19,8 +22,10 @@ namespace CSVUploadToData.Tests.MockSetUp
             SetUpMockDbSet(TList);
 
             _dbContext = new Mock<MyDbContext>();            
+
             _dbContext.Setup(e => e.Set<T>()).Returns(MockDbSet.Object);
-            _dbContext.Setup(e => e.Entry(typeof(T))).
+
+            _repository = new Repository<T, int>(_dbContext.Object);
         }
 
         public Mock<DbSet<T>> SetUpMockDbSet(List<T> TList)
