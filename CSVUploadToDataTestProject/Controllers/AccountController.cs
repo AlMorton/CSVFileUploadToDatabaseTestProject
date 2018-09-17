@@ -74,5 +74,14 @@ namespace CSVUploadToDataTestProject.Controllers
 
             return RedirectToAction("LogIn");
         }
+
+        public IActionResult CurrentUser()
+        {
+            var userName = HttpContext.User.Identity.Name;
+
+            ViewData["username"] = userName;
+
+            return PartialView();
+        }
     }
 }

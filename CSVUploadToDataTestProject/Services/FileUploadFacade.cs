@@ -74,7 +74,5 @@ namespace CSVUploadToDataTestProject.Services
 
             return cSVDataDTO;
         }       
-
-
     }
 }

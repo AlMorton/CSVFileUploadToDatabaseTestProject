@@ -22,11 +22,11 @@ namespace CSVUploadToDataProject.EntityFramework.Repository
 
         public async Task SaveAsync(TEntity entity)
         {
-            var isModified = entity.Id.Equals(default(TId)) ?  EntityState.Added : EntityState.Modified;                         
+            _dbContext.Entry(entity).State = entity.Id.Equals(default(TId)) ?  EntityState.Added : EntityState.Modified;                         
 
-            if(isModified == EntityState.Modified)
+            if(_dbContext.Entry(entity).State == EntityState.Modified)
             {
-                _dbContext.Update(entity);
+                _set.Update(entity);
             }
             else
             {
@@ -34,6 +34,22 @@ namespace CSVUploadToDataProject.EntityFramework.Repository
             }            
 
             await _dbContext.SaveChangesAsync(true);
+        }
+
+        public async Task SaveMany(List<TEntity> entities)
+        {
+            entities.ForEach(e =>
+            {
+                _dbContext.Entry(e).State = e.Id.Equals(default(TId)) ? EntityState.Added : EntityState.Modified;
+            });
+
+            var updateList = entities.Where(e => _dbContext.Entry(e).State == EntityState.Modified).AsEnumerable();
+
+            entities.RemoveAll(e => _dbContext.Entry(e).State == EntityState.Modified);
+
+            _set.UpdateRange(updateList);
+
+            await _set.AddRangeAsync(entities);
         }
 
         public async Task Delete(TEntity entity)

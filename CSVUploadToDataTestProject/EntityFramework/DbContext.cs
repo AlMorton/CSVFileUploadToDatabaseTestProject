@@ -9,11 +9,16 @@ namespace CSVUploadToDataTestProject.EntityFramework
 {
     public class MyDbContext : DbContext
     {
-        public DbSet<Client> Clients { get; set; }
+        public virtual DbSet<Client> Clients { get; set; }
+              
+        public virtual DbSet<CSVData> CSVData { get; set; }
+              
+        public virtual DbSet<Site> Sites { get; set; }
 
-        public DbSet<CSVData> CSVData { get; set; }
+        public MyDbContext()
+        {
 
-        public DbSet<Site> Sites { get; set; }
+        }
 
         public MyDbContext(DbContextOptions<MyDbContext> options ) : base(options)
         {
