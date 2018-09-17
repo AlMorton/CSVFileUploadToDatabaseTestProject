@@ -39,8 +39,8 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                     <li><a asp-area="" asp-controller="Account" asp-action="SignOut">Sign out</a></li>
                 </ul>
-                <div>                    
-                    @await Html.PartialAsync("../Account/CurrentUser")                   
+                <div> 
+                    <h4>@Html.Name(this.User.Identity.Name)</h4>                                          
                 </div>
             </div>
         </div>
