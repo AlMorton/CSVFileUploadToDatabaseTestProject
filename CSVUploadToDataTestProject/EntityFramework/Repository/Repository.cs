@@ -36,7 +36,7 @@ namespace CSVUploadToDataProject.EntityFramework.Repository
             await _dbContext.SaveChangesAsync(true);
         }
 
-        public async Task SaveMany(List<TEntity> entities)
+        public async Task<int> SaveManyAsync(List<TEntity> entities)
         {
             entities.ForEach(e =>
             {
@@ -50,6 +50,8 @@ namespace CSVUploadToDataProject.EntityFramework.Repository
             _set.UpdateRange(updateList);
 
             await _set.AddRangeAsync(entities);
+
+            return await _dbContext.SaveChangesAsync();            
         }
 
         public async Task Delete(TEntity entity)

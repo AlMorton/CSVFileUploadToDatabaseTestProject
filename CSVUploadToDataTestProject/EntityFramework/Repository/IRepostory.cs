@@ -1,4 +1,5 @@
 ﻿using CSVUploadToDataTestProject.EntityFramework;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,6 +9,7 @@ namespace CSVUploadToDataProject.EntityFramework.Repository
     {
         IQueryable<TEntity> Query();
         Task SaveAsync(TEntity entity);
+        Task<int> SaveManyAsync(List<TEntity> entities);
         MyDbContext DbContext();
     }
 }

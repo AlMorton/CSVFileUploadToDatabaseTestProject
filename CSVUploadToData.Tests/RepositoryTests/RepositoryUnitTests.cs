@@ -1,4 +1,5 @@
-﻿using CSVUploadToDataProject.EntityFramework.Repository;
+﻿using CSVUploadToData.Tests.MockSetUp;
+using CSVUploadToDataProject.EntityFramework.Repository;
 using CSVUploadToDataTestProject.EntityFramework;
 using CSVUploadToDataTestProject.EntityFramework.DomainModel;
 using Microsoft.EntityFrameworkCore;
@@ -16,25 +17,16 @@ namespace CSVUploadToData.Tests.RepositoryTests
     {
         private readonly Repository<Client, int> _repository;
 
-        private Mock<MyDbContext> _dbContext { get; set; }
+        private readonly MockDBContext<Client> _MockDBContext;        
 
         public RepositoryUnitTests()
         {
-            var clients = SetUpClients().AsQueryable();
+            _MockDBContext = new MockDBContext<Client>(SetUpClients());
 
-            var mockSet = new Mock<DbSet<Client>>();
+            // Setup the client list
+            _MockDBContext._dbContext.Setup(e => e.Clients).Returns(_MockDBContext.MockDbSet.Object);
 
-            mockSet.As<IQueryable<Client>>().Setup(m => m.Provider).Returns(clients.Provider);
-            mockSet.As<IQueryable<Client>>().Setup(m => m.Expression).Returns(clients.Expression);
-            mockSet.As<IQueryable<Client>>().Setup(m => m.ElementType).Returns(clients.ElementType);
-            mockSet.As<IQueryable<Client>>().Setup(m => m.GetEnumerator()).Returns(clients.GetEnumerator());
-
-            _dbContext = new Mock<MyDbContext>();
-
-            _dbContext.Setup(e => e.Clients).Returns(mockSet.Object);
-            _dbContext.Setup(e => e.Set<Client>()).Returns(mockSet.Object);
-
-            _repository = new Repository<Client, int>(_dbContext.Object);            
+            _repository = new Repository<Client, int>(_MockDBContext._dbContext.Object);           
             
         }
 
@@ -44,6 +36,16 @@ namespace CSVUploadToData.Tests.RepositoryTests
             var client = _repository.Query().First(c => c.Id == 1);
 
             Assert.IsTrue(client.Id == 1);
+        }
+
+        [TestMethod]
+        public void TestSaveMany()
+        {
+            var clients = SetUpClients();
+
+            var result = _repository.SaveManyAsync(clients).Result;
+
+            Assert.IsTrue(result == 4);
         }
 
         private List<Client> SetUpClients()
