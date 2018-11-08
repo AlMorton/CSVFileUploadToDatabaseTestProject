@@ -64,12 +64,7 @@ namespace CSVUploadToDataTestProject
                 .RequireClaim("role", "AppAccess")                  
                 .Build();
 
-            services.AddMvc(options => {
-                
-                //options.Filters.Add(new AuthorizeFilter(siteWidePolicy));
-                //options.Filters.Add(typeof(AllowAnonymousFilter), 2);
-
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddAuthorization(options =>
             {

@@ -49,7 +49,7 @@ namespace CSVUploadToDataTestProject.Controllers
 
         private async Task<bool> ValidateUser(LogInViewModel logIn)
         {
-
+            // Obviously change this for a production environment! 
             if((logIn.Username == "Test" && logIn.Password == "Password1"))
             {
                 var claims = new List<Claim> {
