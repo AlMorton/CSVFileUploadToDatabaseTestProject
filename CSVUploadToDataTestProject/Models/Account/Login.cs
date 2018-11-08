@@ -10,7 +10,6 @@ namespace CSVUploadToDataTestProject.Models.Account
     {
         [Required]
         public string Username { get; set; } = "Test";
-
         [Required]
         public string Password { get; set; } = "Password1";   
         
